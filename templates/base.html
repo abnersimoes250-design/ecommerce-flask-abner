@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ titulo if titulo else 'Mercado ADS' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topo">
+        <a class="marca" href="{{ url_for('inicio') }}">Mercado ADS</a>
+        <nav>
+            <a href="{{ url_for('inicio') }}">Início</a>
+            <a href="{{ url_for('anuncios') }}">Anúncios</a>
+            <a href="{{ url_for('categorias') }}">Categorias</a>
+            <a href="{{ url_for('favoritos') }}">Favoritos</a>
+            <a href="{{ url_for('compras') }}">Compras</a>
+            <a href="{{ url_for('usuarios') }}">Usuários</a>
+        </nav>
+    </header>
+    <main class="container">
+        {% block conteudo %}{% endblock %}
+    </main>
+    <footer>Projeto acadêmico Flask - Abner Simões de Deus - ADS</footer>
+</body>
+</html>

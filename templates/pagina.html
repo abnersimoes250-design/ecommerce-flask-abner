@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="pagina">
+    <span class="selo">Rota implementada</span>
+    <h1>{{ titulo }}</h1>
+    <p>{{ descricao }}</p>
+    <a class="botao secundario" href="{{ url_for('inicio') }}">Voltar ao início</a>
+</section>
+{% endblock %}

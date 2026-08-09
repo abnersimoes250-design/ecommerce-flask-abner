@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="hero">
+    <span class="selo">E-commerce em Flask</span>
+    <h1>Compre, anuncie e encontre seus produtos favoritos.</h1>
+    <p>Protótipo acadêmico com as rotas e a navegação definidas a partir do Modelo Entidade-Relacionamento.</p>
+    <a class="botao" href="{{ url_for('anuncios') }}">Ver anúncios</a>
+</section>
+<section class="grade">
+    <a class="card" href="{{ url_for('perguntas') }}"><h2>Perguntas</h2><p>Tire dúvidas diretamente nos anúncios.</p></a>
+    <a class="card" href="{{ url_for('relatorio_compras') }}"><h2>Minhas compras</h2><p>Consulte seu relatório de compras.</p></a>
+    <a class="card" href="{{ url_for('relatorio_vendas') }}"><h2>Minhas vendas</h2><p>Acompanhe as vendas dos seus anúncios.</p></a>
+</section>
+{% endblock %}
