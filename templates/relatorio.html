@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="cabecalho-pagina"><div><span class="selo">Consulta derivada</span><h1>{{ titulo }}</h1></div></section>
+{% if registros %}
+<div class="tabela-container">
+    <table>
+        <thead><tr><th>Data</th><th>Comprador</th><th>Vendedor</th><th>Anúncio</th><th>Quantidade</th><th>Total</th></tr></thead>
+        <tbody>
+        {% for compra in registros %}
+        <tr>
+            <td>{{ compra.data[8:10] }}/{{ compra.data[5:7] }}/{{ compra.data[0:4] }}</td><td>{{ compra.comprador }}</td>
+            <td>{{ compra.vendedor }}</td><td>{{ compra.anuncio }}</td>
+            <td>{{ compra.quantidade }}</td><td>R$ {{ '%.2f'|format(compra.valor_total) }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="vazio"><h2>Nenhuma compra registrada</h2><p>O relatório será preenchido quando houver compras.</p></div>
+{% endif %}
+{% endblock %}

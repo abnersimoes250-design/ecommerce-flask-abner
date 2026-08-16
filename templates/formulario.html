@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="form-box">
+    <span class="selo">Cadastro e edição</span>
+    <h1>{{ titulo }}</h1>
+    {% if aviso %}<p class="aviso">{{ aviso }}</p>{% endif %}
+    <form method="post">
+        {% for campo in campos %}
+        <div class="campo">
+            <label for="{{ campo.nome }}">{{ campo.rotulo }}</label>
+            {% if campo.tipo == 'textarea' %}
+                <textarea id="{{ campo.nome }}" name="{{ campo.nome }}" {% if campo.required %}required{% endif %}>{{ campo.valor }}</textarea>
+            {% elif campo.tipo == 'select' %}
+                <select id="{{ campo.nome }}" name="{{ campo.nome }}" {% if campo.required %}required{% endif %}>
+                    <option value="">Selecione...</option>
+                    {% for valor, texto in campo.opcoes %}
+                        <option value="{{ valor }}" {% if valor|string == campo.valor|string %}selected{% endif %}>{{ texto }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <input id="{{ campo.nome }}" name="{{ campo.nome }}" type="{{ campo.tipo }}" value="{{ campo.valor }}"
+                       {% if campo.passo %}step="{{ campo.passo }}"{% endif %}
+                       {% if campo.minimo %}min="{{ campo.minimo }}"{% endif %}
+                       {% if campo.required %}required{% endif %}>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="botoes">
+            <button class="botao" type="submit">Salvar</button>
+            <a class="botao secundario" href="{{ url_for('listar', entidade=entidade) }}">Cancelar</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

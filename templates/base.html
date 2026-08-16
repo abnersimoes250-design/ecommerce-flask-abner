@@ -11,16 +11,23 @@
         <a class="marca" href="{{ url_for('inicio') }}">Mercado ADS</a>
         <nav>
             <a href="{{ url_for('inicio') }}">Início</a>
-            <a href="{{ url_for('anuncios') }}">Anúncios</a>
-            <a href="{{ url_for('categorias') }}">Categorias</a>
-            <a href="{{ url_for('favoritos') }}">Favoritos</a>
-            <a href="{{ url_for('compras') }}">Compras</a>
-            <a href="{{ url_for('usuarios') }}">Usuários</a>
+            <a href="{{ url_for('listar', entidade='usuarios') }}">Usuários</a>
+            <a href="{{ url_for('listar', entidade='categorias') }}">Categorias</a>
+            <a href="{{ url_for('listar', entidade='anuncios') }}">Anúncios</a>
+            <a href="{{ url_for('listar', entidade='perguntas') }}">Perguntas</a>
+            <a href="{{ url_for('listar', entidade='respostas') }}">Respostas</a>
+            <a href="{{ url_for('listar', entidade='compras') }}">Compras</a>
+            <a href="{{ url_for('listar', entidade='favoritos') }}">Favoritos</a>
         </nav>
     </header>
     <main class="container">
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensagem in mensagens %}
+                <div class="alerta {{ categoria }}">{{ mensagem }}</div>
+            {% endfor %}
+        {% endwith %}
         {% block conteudo %}{% endblock %}
     </main>
-    <footer>Projeto acadêmico Flask - Abner Simões de Deus - ADS</footer>
+    <footer>Trilha 2 - CRUD com Flask e SQLite - Abner Simões de Deus</footer>
 </body>
 </html>

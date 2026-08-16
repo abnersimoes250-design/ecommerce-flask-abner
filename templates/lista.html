@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="cabecalho-pagina">
+    <div><span class="selo">Consulta de registros</span><h1>{{ titulo }}</h1></div>
+    <a class="botao" href="{{ url_for('novo', entidade=entidade) }}">+ Novo registro</a>
+</section>
+{% if registros %}
+<div class="tabela-container">
+    <table>
+        <thead><tr>{% for rotulo, atributo in colunas %}<th>{{ rotulo }}</th>{% endfor %}<th>Ações</th></tr></thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr>
+                {% for rotulo, atributo in colunas %}
+                    <td>{{ registro[atributo] if registro is mapping else registro|attr(atributo) }}</td>
+                {% endfor %}
+                <td class="acoes">
+                    <a class="link-editar" href="{{ url_for('editar', entidade=entidade, id=registro.id) }}">Editar</a>
+                    <a class="link-excluir" href="{{ url_for('excluir', entidade=entidade, id=registro.id) }}">Excluir</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="vazio"><h2>Nenhum registro cadastrado</h2><p>Clique em “Novo registro” para começar.</p></div>
+{% endif %}
+{% endblock %}

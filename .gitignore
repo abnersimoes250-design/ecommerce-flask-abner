@@ -2,5 +2,7 @@ __pycache__/
 .venv/
 venv/
 *.pyc
+instance/
+*.db
 .idea/
 .vscode/

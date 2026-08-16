@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="form-box confirmar">
+    <span class="selo perigo">Confirmação</span>
+    <h1>{{ titulo }}</h1>
+    <p>Tem certeza que deseja excluir o registro abaixo?</p>
+    <blockquote>{{ descricao }}</blockquote>
+    <form method="post">
+        <div class="botoes">
+            <button class="botao excluir" type="submit">Sim, excluir</button>
+            <a class="botao secundario" href="{{ url_for('listar', entidade=entidade) }}">Não, voltar</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

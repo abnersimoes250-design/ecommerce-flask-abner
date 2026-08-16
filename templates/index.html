@@ -1,14 +1,25 @@
 {% extends "base.html" %}
 {% block conteudo %}
 <section class="hero">
-    <span class="selo">E-commerce em Flask</span>
-    <h1>Compre, anuncie e encontre seus produtos favoritos.</h1>
-    <p>Protótipo acadêmico com as rotas e a navegação definidas a partir do Modelo Entidade-Relacionamento.</p>
-    <a class="botao" href="{{ url_for('anuncios') }}">Ver anúncios</a>
+    <span class="selo">Trilha 2 - CRUD completo</span>
+    <h1>Gerenciamento do e-commerce</h1>
+    <p>Cadastre, consulte, edite e exclua os dados armazenados no banco SQLite.</p>
+</section>
+<section class="resumo">
+    <div><strong>{{ contagens.usuarios }}</strong><span>Usuários</span></div>
+    <div><strong>{{ contagens.categorias }}</strong><span>Categorias</span></div>
+    <div><strong>{{ contagens.anuncios }}</strong><span>Anúncios</span></div>
+    <div><strong>{{ contagens.compras }}</strong><span>Compras</span></div>
 </section>
 <section class="grade">
-    <a class="card" href="{{ url_for('perguntas') }}"><h2>Perguntas</h2><p>Tire dúvidas diretamente nos anúncios.</p></a>
-    <a class="card" href="{{ url_for('relatorio_compras') }}"><h2>Minhas compras</h2><p>Consulte seu relatório de compras.</p></a>
-    <a class="card" href="{{ url_for('relatorio_vendas') }}"><h2>Minhas vendas</h2><p>Acompanhe as vendas dos seus anúncios.</p></a>
+    <a class="card" href="{{ url_for('listar', entidade='usuarios') }}"><h2>Usuários</h2><p>Compradores e vendedores.</p></a>
+    <a class="card" href="{{ url_for('listar', entidade='categorias') }}"><h2>Categorias</h2><p>Organização dos produtos.</p></a>
+    <a class="card" href="{{ url_for('listar', entidade='anuncios') }}"><h2>Anúncios</h2><p>Produtos disponíveis.</p></a>
+    <a class="card" href="{{ url_for('listar', entidade='perguntas') }}"><h2>Perguntas</h2><p>Dúvidas sobre anúncios.</p></a>
+    <a class="card" href="{{ url_for('listar', entidade='respostas') }}"><h2>Respostas</h2><p>Respostas dos vendedores.</p></a>
+    <a class="card" href="{{ url_for('listar', entidade='compras') }}"><h2>Compras</h2><p>Compras sem carrinho.</p></a>
+    <a class="card" href="{{ url_for('listar', entidade='favoritos') }}"><h2>Favoritos</h2><p>Anúncios salvos.</p></a>
+    <a class="card" href="{{ url_for('relatorio_compras') }}"><h2>Relatório de compras</h2><p>Compras realizadas.</p></a>
+    <a class="card" href="{{ url_for('relatorio_vendas') }}"><h2>Relatório de vendas</h2><p>Vendas dos anunciantes.</p></a>
 </section>
 {% endblock %}
