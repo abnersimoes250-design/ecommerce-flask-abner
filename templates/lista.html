@@ -1,29 +1,40 @@
 {% extends "base.html" %}
 {% block conteudo %}
-<section class="cabecalho-pagina">
-    <div><span class="selo">Consulta de registros</span><h1>{{ titulo }}</h1></div>
-    <a class="botao" href="{{ url_for('novo', entidade=entidade) }}">+ Novo registro</a>
+<section class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 py-3 py-md-4">
+    <div>
+        <span class="badge text-bg-primary mb-2">Consulta de registros</span>
+        <h1 class="display-6 fw-bold mb-0">{{ titulo }}</h1>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('novo', entidade=entidade) }}">+ Novo registro</a>
 </section>
+
 {% if registros %}
-<div class="tabela-container">
-    <table>
-        <thead><tr>{% for rotulo, atributo in colunas %}<th>{{ rotulo }}</th>{% endfor %}<th>Ações</th></tr></thead>
-        <tbody>
-            {% for registro in registros %}
-            <tr>
-                {% for rotulo, atributo in colunas %}
-                    <td>{{ registro[atributo] if registro is mapping else registro|attr(atributo) }}</td>
+<div class="card border-0 shadow-sm mb-5">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary">
+                <tr>{% for rotulo, atributo in colunas %}<th scope="col">{{ rotulo }}</th>{% endfor %}<th scope="col">Ações</th></tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    {% for rotulo, atributo in colunas %}<td>{{ registro[atributo] }}</td>{% endfor %}
+                    <td class="text-nowrap">
+                        <a class="btn btn-outline-primary btn-sm" href="{{ url_for('editar', entidade=entidade, id=registro.id) }}">Editar</a>
+                        <a class="btn btn-outline-danger btn-sm" href="{{ url_for('excluir', entidade=entidade, id=registro.id) }}">Excluir</a>
+                    </td>
+                </tr>
                 {% endfor %}
-                <td class="acoes">
-                    <a class="link-editar" href="{{ url_for('editar', entidade=entidade, id=registro.id) }}">Editar</a>
-                    <a class="link-excluir" href="{{ url_for('excluir', entidade=entidade, id=registro.id) }}">Excluir</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 {% else %}
-<div class="vazio"><h2>Nenhum registro cadastrado</h2><p>Clique em “Novo registro” para começar.</p></div>
+<div class="card border-0 shadow-sm text-center py-5 mb-5">
+    <div class="card-body">
+        <h2 class="h4">Nenhum registro cadastrado</h2>
+        <p class="text-secondary mb-0">Clique em “Novo registro” para começar.</p>
+    </div>
+</div>
 {% endif %}
 {% endblock %}

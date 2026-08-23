@@ -1,13 +1,16 @@
 import os
 import sqlite3
 from datetime import date
+from functools import wraps
 
-from flask import Flask, flash, g, redirect, render_template, request, url_for
-from werkzeug.security import generate_password_hash
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "mercado-ads-trilha-2"
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "mercado-ads-trilha-3")
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["DATABASE"] = os.getenv(
     "DATABASE_PATH", os.path.join(app.instance_path, "ecommerce.db")
 )
@@ -101,6 +104,28 @@ def criar_banco():
         """
     )
     banco.commit()
+
+
+@app.before_request
+def carregar_usuario_logado():
+    usuario_id = session.get("usuario_id")
+    if usuario_id is None:
+        g.usuario = None
+    else:
+        g.usuario = conectar_banco().execute(
+            "SELECT id, nome, email FROM usuario WHERE id = ?", (usuario_id,)
+        ).fetchone()
+
+
+def login_obrigatorio(funcao):
+    @wraps(funcao)
+    def funcao_protegida(*args, **kwargs):
+        if g.usuario is None:
+            flash("Faça login para acessar esta página.", "aviso")
+            return redirect(url_for("login"))
+        return funcao(*args, **kwargs)
+
+    return funcao_protegida
 
 
 ENTIDADES = {
@@ -286,7 +311,70 @@ def ler_formulario(configuracao, edicao=False):
     return dados
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if g.usuario is not None:
+        return redirect(url_for("inicio"))
+
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+        senha = request.form.get("senha", "")
+        usuario = conectar_banco().execute(
+            "SELECT * FROM usuario WHERE lower(email) = ?", (email,)
+        ).fetchone()
+
+        if usuario is None or not check_password_hash(usuario["senha"], senha):
+            flash("E-mail ou senha incorretos.", "erro")
+        else:
+            session.clear()
+            session["usuario_id"] = usuario["id"]
+            flash(f"Bem-vindo, {usuario['nome']}!", "sucesso")
+            return redirect(url_for("inicio"))
+
+    return render_template("login.html", titulo="Entrar")
+
+
+@app.route("/cadastro", methods=["GET", "POST"])
+def cadastro():
+    if g.usuario is not None:
+        return redirect(url_for("inicio"))
+
+    if request.method == "POST":
+        nome = request.form.get("nome", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        senha = request.form.get("senha", "")
+
+        if not nome or not email or not senha:
+            flash("Preencha todos os campos.", "erro")
+        elif len(senha) < 6:
+            flash("A senha deve possuir pelo menos 6 caracteres.", "erro")
+        else:
+            banco = conectar_banco()
+            try:
+                banco.execute(
+                    "INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)",
+                    (nome, email, generate_password_hash(senha)),
+                )
+                banco.commit()
+                flash("Conta criada com sucesso. Agora faça o login.", "sucesso")
+                return redirect(url_for("login"))
+            except sqlite3.IntegrityError:
+                banco.rollback()
+                flash("Este e-mail já está cadastrado.", "erro")
+
+    return render_template("cadastro.html", titulo="Criar conta")
+
+
+@app.route("/logout")
+@login_obrigatorio
+def logout():
+    session.clear()
+    flash("Você saiu do sistema.", "sucesso")
+    return redirect(url_for("login"))
+
+
 @app.route("/")
+@login_obrigatorio
 def inicio():
     banco = conectar_banco()
     contagens = {
@@ -299,6 +387,7 @@ def inicio():
 
 
 @app.route("/<entidade>")
+@login_obrigatorio
 def listar(entidade):
     configuracao = obter_configuracao(entidade)
     if not configuracao:
@@ -312,6 +401,7 @@ def listar(entidade):
 
 
 @app.route("/<entidade>/novo", methods=["GET", "POST"])
+@login_obrigatorio
 def novo(entidade):
     configuracao = obter_configuracao(entidade)
     if not configuracao:
@@ -335,6 +425,7 @@ def novo(entidade):
 
 
 @app.route("/<entidade>/<int:id>/editar", methods=["GET", "POST"])
+@login_obrigatorio
 def editar(entidade, id):
     configuracao = obter_configuracao(entidade)
     if not configuracao:
@@ -360,6 +451,7 @@ def editar(entidade, id):
 
 
 @app.route("/<entidade>/<int:id>/excluir", methods=["GET", "POST"])
+@login_obrigatorio
 def excluir(entidade, id):
     configuracao = obter_configuracao(entidade)
     if not configuracao:
@@ -397,11 +489,13 @@ def consultar_relatorio():
 
 
 @app.route("/relatorios/compras")
+@login_obrigatorio
 def relatorio_compras():
     return render_template("relatorio.html", titulo="Relatório de compras", registros=consultar_relatorio())
 
 
 @app.route("/relatorios/vendas")
+@login_obrigatorio
 def relatorio_vendas():
     return render_template("relatorio.html", titulo="Relatório de vendas", registros=consultar_relatorio())
 

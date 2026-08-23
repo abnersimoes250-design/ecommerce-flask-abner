@@ -1,25 +1,53 @@
 {% extends "base.html" %}
 {% block conteudo %}
-<section class="hero">
-    <span class="selo">Trilha 2 - CRUD completo</span>
-    <h1>Gerenciamento do e-commerce</h1>
-    <p>Cadastre, consulte, edite e exclua os dados armazenados no banco SQLite.</p>
+<section class="hero-market rounded-4 p-4 p-md-5 mb-4 shadow-sm text-white">
+    <span class="badge text-bg-light text-primary mb-3">Trilha 3 - Sistema protegido</span>
+    <h1 class="display-5 fw-bold">Gerenciamento do e-commerce</h1>
+    <p class="lead mb-0">Sistema com autenticação, sessão, CRUD completo e páginas responsivas com Bootstrap.</p>
 </section>
-<section class="resumo">
-    <div><strong>{{ contagens.usuarios }}</strong><span>Usuários</span></div>
-    <div><strong>{{ contagens.categorias }}</strong><span>Categorias</span></div>
-    <div><strong>{{ contagens.anuncios }}</strong><span>Anúncios</span></div>
-    <div><strong>{{ contagens.compras }}</strong><span>Compras</span></div>
+
+<section class="row g-3 mb-4">
+    {% for valor, rotulo in [(contagens.usuarios, 'Usuários'), (contagens.categorias, 'Categorias'), (contagens.anuncios, 'Anúncios'), (contagens.compras, 'Compras')] %}
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <strong class="display-6 text-primary">{{ valor }}</strong>
+                <div class="text-secondary">{{ rotulo }}</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </section>
-<section class="grade">
-    <a class="card" href="{{ url_for('listar', entidade='usuarios') }}"><h2>Usuários</h2><p>Compradores e vendedores.</p></a>
-    <a class="card" href="{{ url_for('listar', entidade='categorias') }}"><h2>Categorias</h2><p>Organização dos produtos.</p></a>
-    <a class="card" href="{{ url_for('listar', entidade='anuncios') }}"><h2>Anúncios</h2><p>Produtos disponíveis.</p></a>
-    <a class="card" href="{{ url_for('listar', entidade='perguntas') }}"><h2>Perguntas</h2><p>Dúvidas sobre anúncios.</p></a>
-    <a class="card" href="{{ url_for('listar', entidade='respostas') }}"><h2>Respostas</h2><p>Respostas dos vendedores.</p></a>
-    <a class="card" href="{{ url_for('listar', entidade='compras') }}"><h2>Compras</h2><p>Compras sem carrinho.</p></a>
-    <a class="card" href="{{ url_for('listar', entidade='favoritos') }}"><h2>Favoritos</h2><p>Anúncios salvos.</p></a>
-    <a class="card" href="{{ url_for('relatorio_compras') }}"><h2>Relatório de compras</h2><p>Compras realizadas.</p></a>
-    <a class="card" href="{{ url_for('relatorio_vendas') }}"><h2>Relatório de vendas</h2><p>Vendas dos anunciantes.</p></a>
+
+<section class="row g-3 pb-4">
+    {% set paginas = [
+        ('usuarios', 'Usuários', 'Compradores e vendedores.'),
+        ('categorias', 'Categorias', 'Organização dos produtos.'),
+        ('anuncios', 'Anúncios', 'Produtos disponíveis.'),
+        ('perguntas', 'Perguntas', 'Dúvidas sobre os anúncios.'),
+        ('respostas', 'Respostas', 'Retorno dos vendedores.'),
+        ('compras', 'Compras', 'Compras realizadas sem carrinho.'),
+        ('favoritos', 'Favoritos', 'Anúncios salvos pelos usuários.')
+    ] %}
+    {% for entidade, nome, descricao in paginas %}
+    <div class="col-md-6 col-lg-4">
+        <a class="card card-link border-0 shadow-sm h-100 text-decoration-none" href="{{ url_for('listar', entidade=entidade) }}">
+            <div class="card-body p-4">
+                <h2 class="h5 text-dark">{{ nome }}</h2>
+                <p class="text-secondary mb-0">{{ descricao }}</p>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+    <div class="col-md-6 col-lg-4">
+        <a class="card card-link border-0 shadow-sm h-100 text-decoration-none" href="{{ url_for('relatorio_compras') }}">
+            <div class="card-body p-4"><h2 class="h5 text-dark">Relatório de compras</h2><p class="text-secondary mb-0">Consulta das compras registradas.</p></div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a class="card card-link border-0 shadow-sm h-100 text-decoration-none" href="{{ url_for('relatorio_vendas') }}">
+            <div class="card-body p-4"><h2 class="h5 text-dark">Relatório de vendas</h2><p class="text-secondary mb-0">Consulta das vendas registradas.</p></div>
+        </a>
+    </div>
 </section>
 {% endblock %}

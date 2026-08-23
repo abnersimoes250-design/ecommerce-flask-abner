@@ -1,22 +1,27 @@
 {% extends "base.html" %}
 {% block conteudo %}
-<section class="cabecalho-pagina"><div><span class="selo">Consulta derivada</span><h1>{{ titulo }}</h1></div></section>
+<section class="py-3 py-md-4">
+    <span class="badge text-bg-primary mb-2">Área protegida</span>
+    <h1 class="display-6 fw-bold">{{ titulo }}</h1>
+</section>
 {% if registros %}
-<div class="tabela-container">
-    <table>
-        <thead><tr><th>Data</th><th>Comprador</th><th>Vendedor</th><th>Anúncio</th><th>Quantidade</th><th>Total</th></tr></thead>
-        <tbody>
-        {% for compra in registros %}
-        <tr>
-            <td>{{ compra.data[8:10] }}/{{ compra.data[5:7] }}/{{ compra.data[0:4] }}</td><td>{{ compra.comprador }}</td>
-            <td>{{ compra.vendedor }}</td><td>{{ compra.anuncio }}</td>
-            <td>{{ compra.quantidade }}</td><td>R$ {{ '%.2f'|format(compra.valor_total) }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="card border-0 shadow-sm mb-5">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-primary"><tr><th>Data</th><th>Comprador</th><th>Vendedor</th><th>Anúncio</th><th>Quantidade</th><th>Total</th></tr></thead>
+            <tbody>
+            {% for compra in registros %}
+            <tr>
+                <td>{{ compra.data[8:10] }}/{{ compra.data[5:7] }}/{{ compra.data[0:4] }}</td>
+                <td>{{ compra.comprador }}</td><td>{{ compra.vendedor }}</td><td>{{ compra.anuncio }}</td>
+                <td>{{ compra.quantidade }}</td><td>R$ {{ '%.2f'|format(compra.valor_total) }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% else %}
-<div class="vazio"><h2>Nenhuma compra registrada</h2><p>O relatório será preenchido quando houver compras.</p></div>
+<div class="card border-0 shadow-sm text-center py-5 mb-5"><div class="card-body"><h2 class="h4">Nenhuma compra registrada</h2><p class="text-secondary mb-0">O relatório será preenchido quando houver compras.</p></div></div>
 {% endif %}
 {% endblock %}

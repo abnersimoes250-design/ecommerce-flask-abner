@@ -1,23 +1,13 @@
-# Projeto E-commerce Flask - Trilha 2
+# Projeto E-commerce Flask
 
 Aluno: Abner Simões de Deus  
 Curso: Análise e Desenvolvimento de Sistemas
 
 ## Sobre o projeto
 
-Continuação do projeto de e-commerce desenvolvido na Trilha 1.
-Nesta etapa foi adicionado um banco de dados SQLite e foram implementadas
-as operações de cadastro, consulta, edição e exclusão.
+Projeto desenvolvido nas três trilhas da disciplina de Frameworks para Desenvolvimento de Software.
 
-## Entidades
-
-- Usuários
-- Categorias
-- Anúncios
-- Perguntas
-- Respostas
-- Compras
-- Favoritos
+Nesta etapa final foram adicionados login, controle de sessão, proteção das páginas e componentes do Bootstrap. O sistema continua oferecendo os CRUDs de usuários, categorias, anúncios, perguntas, respostas, compras e favoritos, além dos relatórios de compras e vendas.
 
 ## Tecnologias utilizadas
 
@@ -25,25 +15,30 @@ as operações de cadastro, consulta, edição e exclusão.
 - Flask
 - SQLite
 - HTML e CSS
+- Bootstrap 5
 
-## Como executar
+## Executar no computador
 
-Instale as dependências:
-
-```
+```bash
+venv\Scripts\activate
 python -m pip install -r requirements.txt
-```
-
-Execute o projeto:
-
-```
 python app.py
 ```
 
-Acesse no navegador:
+Depois, acesse `http://127.0.0.1:5000`. No primeiro acesso, clique em **Criar conta** e faça o login.
 
-```
-http://127.0.0.1:5000
-```
+## Páginas públicas
 
-O arquivo do banco de dados é criado automaticamente na primeira execução.
+- Login
+- Criação de conta
+
+## Páginas protegidas
+
+- Página inicial
+- Listas e formulários de todas as entidades
+- Edição e exclusão de registros
+- Relatórios de compras e vendas
+
+## Repositório
+
+https://github.com/abnersimoes250-design/ecommerce-flask-abner.git

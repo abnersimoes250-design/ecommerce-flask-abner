@@ -4,30 +4,58 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ titulo if titulo else 'Mercado ADS' }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <header class="topo">
-        <a class="marca" href="{{ url_for('inicio') }}">Mercado ADS</a>
-        <nav>
-            <a href="{{ url_for('inicio') }}">Início</a>
-            <a href="{{ url_for('listar', entidade='usuarios') }}">Usuários</a>
-            <a href="{{ url_for('listar', entidade='categorias') }}">Categorias</a>
-            <a href="{{ url_for('listar', entidade='anuncios') }}">Anúncios</a>
-            <a href="{{ url_for('listar', entidade='perguntas') }}">Perguntas</a>
-            <a href="{{ url_for('listar', entidade='respostas') }}">Respostas</a>
-            <a href="{{ url_for('listar', entidade='compras') }}">Compras</a>
-            <a href="{{ url_for('listar', entidade='favoritos') }}">Favoritos</a>
-        </nav>
-    </header>
-    <main class="container">
+<body class="bg-body-tertiary d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-xl navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('inicio') if g.usuario else url_for('login') }}">Mercado ADS</a>
+            {% if g.usuario %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('listar', entidade='usuarios') }}">Usuários</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('listar', entidade='categorias') }}">Categorias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('listar', entidade='anuncios') }}">Anúncios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('listar', entidade='perguntas') }}">Perguntas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('listar', entidade='respostas') }}">Respostas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('listar', entidade='compras') }}">Compras</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('listar', entidade='favoritos') }}">Favoritos</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3 text-white">
+                    <span class="small">Olá, <strong>{{ g.usuario.nome }}</strong></span>
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('logout') }}">Sair</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-light btn-sm" href="{{ url_for('login') }}">Entrar</a>
+                <a class="btn btn-light btn-sm text-primary" href="{{ url_for('cadastro') }}">Criar conta</a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container flex-grow-1 py-4">
         {% with mensagens = get_flashed_messages(with_categories=true) %}
             {% for categoria, mensagem in mensagens %}
-                <div class="alerta {{ categoria }}">{{ mensagem }}</div>
+                {% set classe = 'success' if categoria == 'sucesso' else ('warning' if categoria == 'aviso' else 'danger') %}
+                <div class="alert alert-{{ classe }} alert-dismissible fade show shadow-sm" role="alert">
+                    {{ mensagem }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
             {% endfor %}
         {% endwith %}
         {% block conteudo %}{% endblock %}
     </main>
-    <footer>Trilha 2 - CRUD com Flask e SQLite - Abner Simões de Deus</footer>
+
+    <footer class="bg-dark text-white-50 text-center py-3 mt-auto">
+        Trilha 3 - Flask, autenticação e Bootstrap - Abner Simões de Deus
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

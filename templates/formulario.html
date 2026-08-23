@@ -1,34 +1,40 @@
 {% extends "base.html" %}
 {% block conteudo %}
-<section class="form-box">
-    <span class="selo">Cadastro e edição</span>
-    <h1>{{ titulo }}</h1>
-    {% if aviso %}<p class="aviso">{{ aviso }}</p>{% endif %}
-    <form method="post">
-        {% for campo in campos %}
-        <div class="campo">
-            <label for="{{ campo.nome }}">{{ campo.rotulo }}</label>
-            {% if campo.tipo == 'textarea' %}
-                <textarea id="{{ campo.nome }}" name="{{ campo.nome }}" {% if campo.required %}required{% endif %}>{{ campo.valor }}</textarea>
-            {% elif campo.tipo == 'select' %}
-                <select id="{{ campo.nome }}" name="{{ campo.nome }}" {% if campo.required %}required{% endif %}>
-                    <option value="">Selecione...</option>
-                    {% for valor, texto in campo.opcoes %}
-                        <option value="{{ valor }}" {% if valor|string == campo.valor|string %}selected{% endif %}>{{ texto }}</option>
+<div class="row justify-content-center py-3 py-md-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                <span class="badge text-bg-primary mb-2">Cadastro e edição</span>
+                <h1 class="h2 fw-bold mb-3">{{ titulo }}</h1>
+                {% if aviso %}<div class="alert alert-warning">{{ aviso }}</div>{% endif %}
+                <form method="post">
+                    {% for campo in campos %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" for="{{ campo.nome }}">{{ campo.rotulo }}</label>
+                        {% if campo.tipo == 'textarea' %}
+                            <textarea class="form-control" id="{{ campo.nome }}" name="{{ campo.nome }}" rows="4" {% if campo.required %}required{% endif %}>{{ campo.valor }}</textarea>
+                        {% elif campo.tipo == 'select' %}
+                            <select class="form-select" id="{{ campo.nome }}" name="{{ campo.nome }}" {% if campo.required %}required{% endif %}>
+                                <option value="">Selecione...</option>
+                                {% for valor, texto in campo.opcoes %}
+                                    <option value="{{ valor }}" {% if valor|string == campo.valor|string %}selected{% endif %}>{{ texto }}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <input class="form-control" id="{{ campo.nome }}" name="{{ campo.nome }}" type="{{ campo.tipo }}" value="{{ campo.valor }}"
+                                   {% if campo.passo %}step="{{ campo.passo }}"{% endif %}
+                                   {% if campo.minimo %}min="{{ campo.minimo }}"{% endif %}
+                                   {% if campo.required %}required{% endif %}>
+                        {% endif %}
+                    </div>
                     {% endfor %}
-                </select>
-            {% else %}
-                <input id="{{ campo.nome }}" name="{{ campo.nome }}" type="{{ campo.tipo }}" value="{{ campo.valor }}"
-                       {% if campo.passo %}step="{{ campo.passo }}"{% endif %}
-                       {% if campo.minimo %}min="{{ campo.minimo }}"{% endif %}
-                       {% if campo.required %}required{% endif %}>
-            {% endif %}
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                        <a class="btn btn-secondary" href="{{ url_for('listar', entidade=entidade) }}">Cancelar</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        {% endfor %}
-        <div class="botoes">
-            <button class="botao" type="submit">Salvar</button>
-            <a class="botao secundario" href="{{ url_for('listar', entidade=entidade) }}">Cancelar</a>
-        </div>
-    </form>
-</section>
+    </div>
+</div>
 {% endblock %}

@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 {% block conteudo %}
-<section class="form-box confirmar">
-    <span class="selo perigo">Confirmação</span>
-    <h1>{{ titulo }}</h1>
-    <p>Tem certeza que deseja excluir o registro abaixo?</p>
-    <blockquote>{{ descricao }}</blockquote>
-    <form method="post">
-        <div class="botoes">
-            <button class="botao excluir" type="submit">Sim, excluir</button>
-            <a class="botao secundario" href="{{ url_for('listar', entidade=entidade) }}">Não, voltar</a>
+<div class="row justify-content-center py-4 py-md-5">
+    <div class="col-lg-7">
+        <div class="card border-danger shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                <span class="badge text-bg-danger mb-2">Confirmação necessária</span>
+                <h1 class="h2 fw-bold">{{ titulo }}</h1>
+                <p>Tem certeza de que deseja excluir o registro abaixo?</p>
+                <div class="alert alert-secondary fw-semibold">{{ descricao }}</div>
+                <form method="post" class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-danger" type="submit">Sim, excluir</button>
+                    <a class="btn btn-secondary" href="{{ url_for('listar', entidade=entidade) }}">Não, voltar</a>
+                </form>
+            </div>
         </div>
-    </form>
-</section>
+    </div>
+</div>
 {% endblock %}
