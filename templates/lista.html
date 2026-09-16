@@ -8,6 +8,22 @@
     <a class="btn btn-primary" href="{{ url_for('novo', entidade=entidade) }}">+ Novo registro</a>
 </section>
 
+<form method="get" class="card card-body border-0 shadow-sm mb-4" role="search">
+    <div class="row g-2 align-items-center">
+        <div class="col-12 col-md">
+            <label class="visually-hidden" for="campo-busca">Buscar</label>
+            <input class="form-control" id="campo-busca" name="busca" type="search"
+                   value="{{ busca }}" placeholder="Buscar nesta lista">
+        </div>
+        <div class="col-12 col-md-auto d-grid d-md-flex gap-2">
+            <button class="btn btn-primary" type="submit">Buscar</button>
+            {% if busca %}
+            <a class="btn btn-outline-secondary" href="{{ url_for('listar', entidade=entidade) }}">Limpar</a>
+            {% endif %}
+        </div>
+    </div>
+</form>
+
 {% if registros %}
 <div class="card border-0 shadow-sm mb-5">
     <div class="table-responsive">
@@ -32,8 +48,13 @@
 {% else %}
 <div class="card border-0 shadow-sm text-center py-5 mb-5">
     <div class="card-body">
+        {% if busca %}
+        <h2 class="h4">Nenhum resultado encontrado</h2>
+        <p class="text-secondary mb-0">Tente outro termo ou limpe a busca.</p>
+        {% else %}
         <h2 class="h4">Nenhum registro cadastrado</h2>
         <p class="text-secondary mb-0">Clique em “Novo registro” para começar.</p>
+        {% endif %}
     </div>
 </div>
 {% endif %}

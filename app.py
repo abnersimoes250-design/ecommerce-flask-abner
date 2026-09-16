@@ -392,12 +392,23 @@ def listar(entidade):
     configuracao = obter_configuracao(entidade)
     if not configuracao:
         return "Entidade não encontrada", 404
+    busca = request.args.get("busca", "").strip()
     registros = [
         dict(linha)
         for linha in conectar_banco().execute(configuracao["lista_sql"]).fetchall()
     ]
+    if busca:
+        termo = busca.casefold()
+        registros = [
+            registro
+            for registro in registros
+            if any(
+                termo in str(registro.get(atributo, "")).casefold()
+                for _, atributo in configuracao["colunas"]
+            )
+        ]
     return render_template("lista.html", titulo=configuracao["titulo"], entidade=entidade,
-                           registros=registros, colunas=configuracao["colunas"])
+                           registros=registros, colunas=configuracao["colunas"], busca=busca)
 
 
 @app.route("/<entidade>/novo", methods=["GET", "POST"])
